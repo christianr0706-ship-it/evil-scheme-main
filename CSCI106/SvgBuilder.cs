@@ -1,4 +1,5 @@
 ﻿namespace CSCI106
+
 {
     public class SvgBuilder
     {
@@ -25,5 +26,13 @@
             string.Format(SVG_HEADER_TEMPLATE, Width, Height)
                 + Buffer
                 + SVG_FOOTER;
+
+        public SvgBuilder Rect(int x, int y, int width, int height)
+        {
+            Buffer += $"<rect x=\"{x}\" y=\"{y}\" width=\"{width}\" height=\"{height}\" />";
+            return this;
+        } 
+
+
     }
 }
