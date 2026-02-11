@@ -27,6 +27,8 @@
                 + Buffer
                 + SVG_FOOTER;
 
+                
+
         public SvgBuilder Rect(int x, int y, int width, int height)
         {
             Buffer += $"<rect x=\"{x}\" y=\"{y}\" width=\"{width}\" height=\"{height}\" />";
