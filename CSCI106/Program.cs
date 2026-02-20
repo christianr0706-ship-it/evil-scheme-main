@@ -5,49 +5,101 @@
 
         static void Main()
         {
-            int x = 10;
-            int y = 10;
-            int width = 100;
-            int height = 100;
+        int x = 0;  // establishing these here so that we can change them later
+        int y = 0;  // because if I do it later everything hates me for some reason
+        int width = 0;
+        int height = 0;
+        string input;
+        string[] array;
+        int[]? arr2 = null;
 
-            bool Building = true;
-
-            while (Building == true)
+        bool Inputting = true;
+        bool Building = false;
+            
+        while (Inputting == true)
             {
-                var svg = SvgBuilder.New((500, 500)).Rect(x, y, width, height).Build();
+            Console.WriteLine("Input four numbers separated only by spaces.");
+            Console.WriteLine("First number is your X-Coordinate,");
+            Console.WriteLine("Second number is your Y-Coordinate,");
+            Console.WriteLine("Third number is your rectangle width,");
+            Console.WriteLine("And fourth number is your rectangle height.");
+            Console.WriteLine();
 
-                Console.Write("Absolute path to save SVG at: ");
-                var path = Console.ReadLine() ?? "";
-                
-                if (x >= 0 && x <= 500 && y >= 0 && y <= 500 && width > 0 && width < 500 && height > 0 && height < 500)
+            input = Console.ReadLine(); // here we get the numbers
+            array = input.Split(' '); // here we split them up into a string array by the spaces
+             
+            arr2 = Array.ConvertAll(array, s => int.Parse(s)); // these strange glyphs convert it into an array of ints
+
+            Inputting = false;
+            }
+
+        if (arr2.Length == 4)
+        {
+        x = arr2[0];       // declaring that the parameters in the array are actually the parameters
+        y = arr2[1];
+        width = arr2[2];
+        height = arr2[3];
+
+        Inputting = false;
+        Building = true;
+
+        }
+        else
+        {
+        Console.WriteLine("Try again.");
+        Inputting = true;
+
+        // I'm done for today but some things need to be added/fixed.
+        // - Combine the arr2.Length check with the checks below for one unified system, that way any error leads to the same reset
+        // - also actually fix the reset. So any mistake in inputs actually lets the user redo it instead of breaking everything.
+
+        }
+    
+            while (Building == true)
+            {   
+                if (x >= 0
+                &&  x <= 500
+                &&  y >= 0
+                &&  y <= 500
+                &&  width > 0
+                &&  width < 500
+                &&  height > 0
+                &&  height < 500
+                &&  x + width <= 500
+                &&  y + height <= 500
+                )
+
                 // This is just making sure no individual paranmeter is negative or goes above 500 since that would
                 // obviously be just a slight bit problematic in a 500x500 square.
+                // > I also just combined the whole "rectangle too big" check into this.
                 // And I don't know what happens when a square has 0 width / 0 height so im not letting that happen either.
                 {
-                    if (x + width <= 500 && y + height <= 500)
-                    // now we're making sure the two sides of the square aren't too long once paired with x/y vals.
-                    {
+
                         Console.WriteLine("(temporary message) Should work");
+
+                        var svg = SvgBuilder.New((500, 500)).Rect(x, y, width, height).Build();
+
+                        Console.Write("Absolute path to save SVG at: ");
+                        var path = Console.ReadLine() ?? "";
 
                         using (var fileWriter = FileWriter.FromAbsolutePath(path))
                         fileWriter.WriteLine(svg);
 
                         break;
-                    }
-
-                    else
-                    {
-                    Console.WriteLine("bad evil vibes. Your rectangle goes outside the parameters.");
-                    Building = true;
-                    }
                 }
 
                 else
                 {
-                    Console.WriteLine("terrible misfortune. Your rectangle doesn't even start in bounds.");
-                    Building = true;
-                    // I let it repeat in case parameters are user-inputed in the future.
-                    // But for now I can just code them in.
+                    Console.WriteLine("Error with parameters.");
+                    
+                    //Building = true;
+
+                    break;
+                    
+                    // The break here is a bandaid over an issue I'd rather figure out later.
+                    // This won't come back to bite me or anything though. hopefully.
+
+                    // update: i forgot what the issue was
                 }
             }
         }
